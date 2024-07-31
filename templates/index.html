@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP Chatbot</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div id="chatbox">
+        <h2>NLP Chatbot</h2>
+        <div class="marquee">
+            <div class="marquee-content">Welcome to the NLP Chatbot! Ask me anything.</div>
+        </div>
+        <div id="chatlog"></div>
+        <form id="chatForm">
+            <input type="text" id="userInput" placeholder="Type a message..." required>
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+            <div class="loading-indicator" id="loadingIndicator">Loading...</div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const userInput = document.getElementById('userInput').value;
+            const timestamp = new Date().toLocaleTimeString();
+            document.getElementById('loadingIndicator').style.display = 'inline-block';
+            
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ 'message': userInput })
+            });
+            const data = await response.json();
+            document.getElementById('chatlog').innerHTML += `
+                <div class="user-message">
+                    ${userInput}
+                    <div class="timestamp">${timestamp}</div>
+                </div>`;
+            document.getElementById('chatlog').innerHTML += `
+                <div class="bot-message">
+                    ${data.response}
+                    <div class="timestamp">${new Date().toLocaleTimeString()}</div>
+                </div>`;
+            document.getElementById('userInput').value = '';
+            document.getElementById('chatlog').scrollTop = document.getElementById('chatlog').scrollHeight;
+            document.getElementById('loadingIndicator').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
