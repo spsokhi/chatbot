@@ -22,8 +22,8 @@ This is an NLP Chatbot application using Flask and DialoGPT. The chatbot is serv
 
 1. **Clone the repository**:
    ```
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/spsokhi/chatbot.git
+   cd chatbot
 2. **Create and activate a virtual environment**:
     ```
     python3 -m venv chatbot_env
